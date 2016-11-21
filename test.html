@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	<style>
+*{margin:0; padding:0;}
+body { height: 2000px;}
+#box{width:400px; height:300px; border:1px solid #000; margin:100px auto; position:relative; overflow:hidden;}
+#l_box{ position:absolute; left:0; top:0; width:370px; height:300px;}
+#content{ position:absolute;width:100%; position:absolute; top:0; left:0;}
+#r_box{ position:absolute; right:0; top:0; width:30px; height:100%; background:#ccc;}
+#bar{position:absolute; top:0; left:0; background:yellow; width:30px; height:50px;}
+</style>
+<script src="wheel.js"></script>
+<script>
+window.onload=function(){
+	var oBox = document.getElementById('box');
+	var oLBox = document.getElementById('l_box');
+	var oRBox = document.getElementById('r_box');
+	var oCon = document.getElementById('content');
+	var oBar = document.getElementById('bar');
+	oBar.onmousedown=function(ev){
+		var oEvent = ev||event;
+		var disY = oEvent.clientY-oBar.offsetTop;
+		document.onmousemove=function(ev){
+			var oEvent = ev||event;
+			var t = oEvent.clientY-disY;
+			fn(t);
+			
+		};
+		document.onmouseup=function(){
+			document.onmousemove=document.onmouseup=null;
+			oBar.releaseCapture&&oBar.releaseCapture();
+		};
+		oBar.setCapture&&oBar.setCapture();
+		return false;
+	};
+	function fn(t){
+		if(t<0){
+			t = 0;
+		}else if(t>oRBox.offsetHeight-oBar.offsetHeight){
+			t = oRBox.offsetHeight-oBar.offsetHeight;
+		}
+		oBar.style.top = t+'px';
+		
+		var scale = t/(oRBox.offsetHeight-oBar.offsetHeight);
+		
+		oCon.style.top = -(oCon.scrollHeight-oBox.offsetHeight)*scale+'px';
+	}
+	
+	oBox.onmouseover = function(){
+		addWheel(oBox,function(bDir){
+			var t = oBar.offsetTop;
+			if(bDir){
+				t+=10;
+			}else{
+				t-=10;
+			}
+			fn(t);
+		});
+	}
+	oBox.onmouseout = function(){
+		addWheel=function(){return false}
+	}
+};
+</script>
+</head>
+
+<body>
+<div id="box">
+	<div id="l_box">
+		<div id="content">
+			6月21日凌晨，京东与1号店事件正式尘埃落定，1号店主要资产并入京东，沃尔玛将获得京东新发行的144,952,250股A类普通股，持股比例为4.97%，而1号店的价值也并不是日前媒体们揭秘的400亿，1号店的实际价值约95亿。
+无论1号店过去经历了多少辉煌，今日的再度易主，也彻底将1号店的命运推进万丈深渊。平安是万恶的资本家，沃尔玛是水土不服，京东则是真正的吸血鬼，1号店最终到了京东的手里，肯定不会有好下场。
+刘强东表示：“1号店在家居用品和食品杂货等重要品类，以及在华东和华南等重点区域有鲜明的优势，我们非常期待通过此次联手进一步推动1号店的发展，我们将发挥京东卓越的物流能力和丰富的品类实力，确保1号店将继续为其用户提供越来越好的商品和更优质的服务。”很明显，京东看中了1号店多年在华东地区的经营成果。
+京东方面的资料显示，京东将拥有1号商城主要资产，包括“1号店”的品牌、网站、APP。实际上除了这些“软”资产外，1号店还拥有物流仓储等多方面的硬资产，而这一切，将会归京东所有。
+截止到2012年年底，1号店在上海、北京、广州、成都、武汉拥有近28万平方米的仓库，并在全国40个城市自建配送站点近200个，光上海的新库仓储面积就超过6万平米，而京东在上海最大的仓储“亚洲一号”的面积为10万平米。
+		</div>
+	</div>
+	<div id="r_box">
+		<div id="bar"></div>
+	</div>
+</div>
+</body>
+</html>
